@@ -13,8 +13,8 @@ const initialDistance = 0; // distance (km)
 const remainingFuel = 5000; // remaining fuel (kg)
 const fuelBurnRate = 0.5; // fuel burn rate (kg/s)
 
-const d2 = initialDistance + velocityKmPerHour * timeSeconds; //calcultes new distance
-const rf = fuelBurnRate * timeSeconds; //calculates remaining fuel
+const d2 = (initialDistance + (velocityKmPerHour / 3.6) * timeSeconds) / 1000; //calcultes new distance
+const rf = remainingFuel - fuelBurnRate * timeSeconds; //calculates remaining fuel
 const vel2 = calcNewVel(
   accelerationMetersPerSecSquared,
   velocityKmPerHour,
@@ -22,15 +22,21 @@ const vel2 = calcNewVel(
 ); //calculates new velocity based on acceleration
 
 // Pick up an error with how the function below is called and make it robust to such errors
-function calcNewVel(vel, acc, time) {
+function calcNewVel(
+  accelerationMetersPerSecSquared,
+  velocityKmPerHour,
+  timeSeconds
+) {
   if (
-    typeof vel !== "number" ||
-    typeof acc !== "number" ||
-    typeof time !== "number"
+    typeof velocityKmPerHour !== "number" ||
+    typeof accelerationMetersPerSecSquared !== "number" ||
+    typeof velocityKmPerHour !== "number"
   ) {
-    throw new Error("invalid input. Parameters must be numbers");
+    console.log("invalid input. Parameters must be numbers");
   }
-  return vel + acc * time;
+  return (
+    velocityKmPerHour + accelerationMetersPerSecSquared * 3.6 * timeSeconds
+  );
 }
 
 console.log(`Corrected New Velocity: ${vel2} km/h`);
